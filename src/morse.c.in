@@ -1,0 +1,25 @@
+/* See COPYING file for copyright and license information. */
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include "morse.h"
+
+#define MORSE_CHAR_MAX 255
+
+const char *MORSE_CODES[MORSE_CHAR_MAX+1] = {
+  /*@@morse_codes@@*/
+};
+
+char morse_code_is_char(char asc_char)
+{
+  return (asc_char >= 0 && asc_char <= MORSE_CHAR_MAX &&
+      MORSE_CODES[(unsigned int) asc_char][0] != '\0');
+}
+
+const char *morse_code_from_asc(char asc_char)
+{
+  if (!morse_code_is_char(asc_char))
+    return NULL;
+  else
+    return (const char *) MORSE_CODES[(unsigned int) asc_char];
+}
