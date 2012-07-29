@@ -19,6 +19,9 @@ There's a choice of two audio backends and at least one is required:
 * libao - http://xiph.org/ao (default)
 * PortAudio - http://www.portaudio.com
 
+Also, in order to generate the Morse code/character table in `morse.c`,
+Python 2.6 or greater is required.
+
 Installation
 ------------
 
