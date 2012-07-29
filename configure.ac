@@ -23,12 +23,6 @@ fi
 
 AM_CONDITIONAL(USE_PORTAUDIO, [test "x$with_portaudio" = "xyes"])
 
-AC_PATH_PROG([PYTHON], [python], [no])
-AC_SUBST([PYTHON])
-if [[ x"$PYTHON" = "xno" ]]; then
-  AC_MSG_ERROR([Python was not found, you need Python.])
-fi
-
 AC_CONFIG_FILES([
     Makefile
     src/Makefile

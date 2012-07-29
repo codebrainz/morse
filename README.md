@@ -2,8 +2,8 @@ Morse
 =====
 
 Morse is a very basic and probably inaccurate text to Morse code converter.
-It takes ASCII text read from standard input and playes the Morse codes
-audibly (as well as printing each character played as it's played).
+It takes ASCII text read from standard input and plays the Morse codes
+audibly (as well as printing each character as it's played).
 
 ### Disclaimer
 
@@ -20,7 +20,8 @@ There's a choice of two audio backends and at least one is required:
 * PortAudio - http://www.portaudio.com
 
 Also, in order to generate the Morse code/character table in `morse.c`,
-Python 2.6 or greater is required.
+Python 2.6 or greater is required. Normally you will not need Python unless
+you update the `morse.json` file and want to re-generate the `morse.c` file.
 
 Installation
 ------------
@@ -35,6 +36,20 @@ The usual:
 
 The `--with-portaudio` argument to `./configure` enables the PortAudio
 backend and disables the libao backend. The default is to use libao.
+
+### Regenerating the morse.c file
+
+The `morse.c` file is generated using the `gencodes.py` Python script in
+the `src` directory. It reads the data in `morse.json` and generates some C
+code which is put into the contents of `morse.c.in` by replacing a special
+token and the replaced contents are written to `morse.c`.
+
+If you want to regerenate `morse.c`, do the following:
+
+    $ cd src
+    $ python gencodes.py -t morse.c.in -j morse.json > morse.c
+
+And then perform a rebuild/re-install according to the instructions above.
 
 Usage
 -----

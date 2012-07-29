@@ -12,7 +12,6 @@ Makefile.in
 /src/stamp-h1
 
 /src/config.h*
-/src/morse.c
 /src/morse
 
 *.[ao]
