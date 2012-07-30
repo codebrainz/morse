@@ -1,6 +1,6 @@
 lib_LTLIBRARIES = libmorse.la
 
-libmorse_la_SOURCES = morse.c keyer.c beep-ao.c beep-pa.c
+libmorse_la_SOURCES = morse.c keyer.c beep-ao.c beep-pa.c beep.c beep-private.h
 libmorse_la_CPPFLAGS = $(PA_CFLAGS) $(AO_CFLAGS)
 libmorse_la_LIBADD = $(PA_LIBS) $(AO_LIBS) -lm
 

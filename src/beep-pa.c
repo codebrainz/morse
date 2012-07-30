@@ -9,46 +9,18 @@
 #include <string.h>
 #include <errno.h>
 #include <stdio.h>
-#include <math.h>
 #include <portaudio.h>
 
 #include "beep.h"
-
-#define AMPLITUDE 255
-#define SAMPLE_RATE 8000
+#include "beep-private.h"
 
 static short initialized = 0;
-
-typedef struct buffer_t {
-  char *data;
-  unsigned int len;
-  double freq;
-  double duration;
-} buffer_t;
 
 static struct {
   PaStream *stream;
   PaStreamParameters params;
-  buffer_t buffer;
+  BeepBuffer buffer;
 } g_beep;
-
-static buffer_t
-generate_beep_sine(double freq, double duration)
-{
-  unsigned int i;
-  buffer_t buf = { NULL, 0 };
-
-  buf.freq = freq;
-  buf.duration = duration;
-  buf.len = (unsigned int) (duration * SAMPLE_RATE);
-  buf.data = calloc(buf.len, sizeof(char));
-
-  for (i = 0; i < buf.len; i++) {
-    buf.data[i] = (char) (AMPLITUDE * sin((2 * M_PI * i * freq) / SAMPLE_RATE));
-  }
-
-  return buf;
-}
 
 void beep_init(void)
 {
@@ -122,10 +94,7 @@ void beep(double freq, double duration)
   beep_init();
 
   /* If different from last call, re-create the sine wave */
-  if (freq != g_beep.buffer.freq || duration != g_beep.buffer.duration) {
-    free(g_beep.buffer.data);
-    g_beep.buffer = generate_beep_sine(freq, duration);
-  }
+  beep_buffer_generate_sine_data(&(g_beep.buffer), freq, duration);
 
   err = Pa_WriteStream(g_beep.stream, g_beep.buffer.data, g_beep.buffer.len);
   if (err != paNoError && err != paOutputUnderflowed) {
