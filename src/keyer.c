@@ -70,6 +70,18 @@ double keyer_get_unit_duration(Keyer *keyer)
   return keyer ? keyer->unit_duration : 0.0;
 }
 
+void keyer_set_verbose(Keyer *keyer, char verbose)
+{
+  if (keyer) {
+    keyer->verbose = verbose;
+  }
+}
+
+char keyer_get_verbose(Keyer *keyer)
+{
+  return keyer ? keyer->verbose : 1;
+}
+
 static void keyer_putchar(Keyer *keyer, char c)
 {
   if (keyer != NULL && keyer->verbose) {

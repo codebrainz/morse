@@ -52,6 +52,13 @@ void keyer_set_unit_duration(Keyer *keyer, double unit_duration);
 double keyer_get_unit_duration(Keyer *keyer);
 
 /*
+ * Set and get whether the keyer echoes back the morse codes as they're
+ * played. Default is to echo (1).
+ */
+void keyer_set_verbose(Keyer *keyer, char verbose);
+char keyer_get_verbose(Keyer *keyer);
+
+/*
  * Play a string as morse code. The string must be nul (0) terminated.
  * Non-morse characters are not keyed and are ignored. Multiple consecutive
  * whitespace characters are played as a sigle space.
