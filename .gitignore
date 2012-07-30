@@ -14,6 +14,8 @@ Makefile.in
 /src/config.h*
 /src/morse
 
+/demos/beep
+
 *.[ao]
 *.so
 *.dll
