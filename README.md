@@ -75,6 +75,78 @@ dot length) in seconds. The duration of all tones is based on this value
 There's also a not very helpful `-h` option that will just print a usage
 message.
 
+Using the Library
+-----------------
+
+The best example to see how to use the library is the `main.c` file. Here's
+a little (untested) snippet that shows how to use some parts of the library:
+
+```c
+#include <morse/keyer.h>
+
+int main(int argc, char *argv[])
+{
+  Keyer *k;
+  const char *TEST_STRING = "Hello World";
+
+  /* Allocates a new keyer and implicitely calls `keyer_init()` if
+   * it hasn't been called yet. */
+  k = keyer_new();
+
+  if (k) {
+    keyer_set_freq(k, 2000.0 /* Hz */);
+    keyer_set_unit_duration(k, 0.08 /* Seconds */);
+    keyer_key_string(k, TEST_STRING);
+    keyer_free(k);
+  }
+
+  /* Optionally clean up some allocated resources, otherwise the OS
+   * will clean it up when the program exits. */
+  keyer_shutdown();
+
+  return 0;
+}
+```
+
+If you just want to use the "beep" code:
+
+```c
+#include <morse/beep.h>
+
+int main(int argc, char *argv[])
+{
+
+  beep(440.0, 2.0); /* Play a 440 Hz sine wave for 2 seconds. */
+  beep(1000.0, 0.5); /* Play a 1000 Hz sine wave for 0.5 seconds. */
+
+  /* Optional, use to free resources instead of letting the OS clean
+   * it up when the program exits */
+  beep_shutdown();
+}
+```
+
+To get the Morse code as a string of encoded `-` and `.` characters, use:
+
+```c
+#include <morse/morse.h>
+
+int main(int argc, char *argv[])
+{
+  char test_char = 'a';
+  const char *morse_code = morse_code_from_asc(test_char);
+
+  printf("The character '%c' encoded into a Morse string is: %s\n",
+    test_char, morse_code);
+
+  /* To test to see if a char is a supported Morse character */
+  if (morse_code_is_char('<')) {
+    printf("The Morse code for '<' is: %s\n", morse_code_from_asc('<'));
+  }
+}
+```
+
+None of the functions in the library claim to be thread-safe.
+
 Credits and License
 -------------------
 

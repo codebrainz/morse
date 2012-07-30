@@ -20,3 +20,5 @@ Makefile.in
 *.lib
 *.dylib
 *.tar.*
+*.lo
+*.la
