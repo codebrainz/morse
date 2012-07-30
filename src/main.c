@@ -28,9 +28,11 @@ int main(int argc, char *argv[])
   char quiet = 0;
   char chr_mode = 0;
   int tty_fd = 0;
-  Keyer *keyer = keyer_new();
+  Keyer *keyer;
 
   parse_args(argc, argv, &freq, &unit_dur, &quiet, &chr_mode);
+
+  keyer = keyer_new();
 
   if (freq > 0.0) {
     keyer_set_freq(keyer, freq);
@@ -83,6 +85,35 @@ int main(int argc, char *argv[])
   return 0;
 }
 
+static void print_help(void)
+{
+  static const char *help_text = "Usage: " PACKAGE " [-d VAL] [-f VAL] [-q]"
+#ifdef HAVE_TERMIOS_H
+    " [-c]"
+#endif
+    "\n\n"
+    "Options:\n"
+    "  -h      Show this message and exit.\n"
+    "  -v      Show a version message and exit.\n"
+    "  -d VAL  The duration of one unit (ex. dot).\n"
+    "  -f VAL  The frequency of the beep's sine wave.\n"
+    "  -q      Don't echo input to standard output.\n"
+#ifdef HAVE_TERMIOS_H
+    "  -c      Enable \"continuous\" or \"character\" mode.\n"
+#endif
+    "\nBackend in use: "
+#if defined(BEEP_BACKEND_LIBAO)
+    "libao\n"
+#elif defined(BEEP_BACKEND_PORTAUDIO)
+    "PortAudio\n"
+#else
+    "unknown\n"
+#endif
+    "\nWritten by Matthew Brush <mbrush@codebrainz.ca>\n";
+
+  fputs(help_text, stdout);
+}
+
 static void parse_args(int argc, char *argv[], double *freq, double *dur,
   char *quiet, char *chr_mode)
 {
@@ -96,11 +127,10 @@ static void parse_args(int argc, char *argv[], double *freq, double *dur,
 
   for (i = 0; i < argc; i++) {
     if (strcmp(argv[i], "-h") == 0) {
-#ifdef HAVE_TERMIOS_H
-      fputs("Usage: morse [-d VAL] [-f VAL] [-q] [-c]\n", stdout);
-#else
-      fputs("Usage: morse [-d VAL] [-f VAL] [-q]\n", stdout);
-#endif
+      print_help();
+      exit(EXIT_SUCCESS);
+    } else if (strcmp(argv[i], "-v") == 0) {
+      fputs(PACKAGE " v" PACKAGE_VERSION "\n", stdout);
       exit(EXIT_SUCCESS);
     } else if (strcmp(argv[i], "-q") == 0) {
       q = 1;
