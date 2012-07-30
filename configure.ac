@@ -10,6 +10,8 @@ LT_INIT
 
 AC_PROG_CC
 
+AC_CHECK_HEADERS([termios.h])
+
 AC_ARG_WITH([portaudio], AS_HELP_STRING([--with-portaudio], [Use the PortAudio backend]))
 
 if test "$with_portaudio" = "yes"

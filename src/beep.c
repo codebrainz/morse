@@ -1,6 +1,11 @@
 /* See COPYING file for copyright and license information. */
 #include <stdlib.h>
 #include <math.h>
+
+#ifdef HAVE_CONFIG_H
+#  include "config.h"
+#endif
+
 #include "beep.h"
 #include "beep-private.h"
 

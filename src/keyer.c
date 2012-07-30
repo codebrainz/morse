@@ -98,6 +98,13 @@ static char *keyer_cleanstring(const char *s)
   char *ptr;
   char *dup = malloc(slen+1);
 
+  /* We don't want to strip away extra whitespace for single characters. */
+  if (slen == 1 && isspace(s[0])) {
+    dup[0] = ' ';
+    dup[1] = '\0';
+    return dup;
+  }
+
   for (i = 0; i < slen; i++) {
     /* handle a single space not preceeded by another space */
     if (isspace(s[i]) && (i == 0 || !isspace(s[i-1]))) {
@@ -107,22 +114,26 @@ static char *keyer_cleanstring(const char *s)
       dup[dlen++] = s[i];
     }
   }
-  dup[dlen-1] = '\0';
 
-  /* Strip off trailing space */
-  for (i = dlen-1; i >= 0; i--) {
-    if (isspace(dup[i])) {
-      dup[i] = '\0';
-    } else {
-      break;
-    }
-  }
+  /* Zero-fill the rest of the string */
+  while (dlen < slen)
+    dup[dlen++] = '\0';
 
   /* Strip off leading whitespace */
   for (ptr = dup; *ptr && isspace(*ptr); ptr++) {
     ;
   }
-  memmove(dup, ptr, dlen-(ptr-dup));
+  memmove(dup, ptr, strlen(ptr) + 1);
+
+  /* Strip off trailing whitespace */
+  dlen = strlen(dup);
+  while (dlen--) {
+    if (isspace(dup[dlen])) {
+      dup[dlen] = '\0';
+    } else {
+      break;
+    }
+  }
 
   return dup;
 }
@@ -146,6 +157,7 @@ void keyer_key_string(Keyer *keyer, const char *s)
     if (isspace(*ptr)) {
       keyer_putchar(keyer, ' ');
       beep(SILENCE, keyer->unit_duration * 7); /* Inter-word gap */
+      continue;
     }
 
     code = (char*) morse_code_from_asc(*ptr);
