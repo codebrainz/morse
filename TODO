@@ -1,0 +1,10 @@
+Things that would be cool to do:
+
+  - Verify with someone who knows Morse code whether the output is useful
+  - Support > 8-bit unsigned audio buffers
+  - Support other waveforms than sine
+  - Allow changing the volume/amplitude of the beeps
+  - Test on OSX and Windows
+  - Make some packages and bundles so people don't need to compile
+  - Allow saving playback to an audio file
+  - Decoding Morse code from audio/file input
